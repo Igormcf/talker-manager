@@ -53,4 +53,25 @@ router.post('/',
     res.status(201).json({ id, name, age, talk });
 });
 
+router.put('/:id',
+  authorization,
+  validaName,
+  validaAge,
+  validaTalk,
+  validaWatchedAt,
+  validaRate,
+  async (req, res) => {
+    const id = Number(req.params.id);
+    const { name, age, talk } = req.body;
+    const result = await readTalker();
+
+    const findIxResult = result.findIndex((item) => item.id === id);
+
+    result[findIxResult] = { ...result[findIxResult], name, age, talk };
+
+    await writeTalker(result);
+
+    return res.status(200).json({ id, name, age, talk });
+});
+
 module.exports = router;
