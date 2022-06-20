@@ -74,4 +74,15 @@ router.put('/:id',
     return res.status(200).json({ id, name, age, talk });
 });
 
+router.delete('/:id', authorization, async (req, res) => {
+  const { id } = req.params;
+  const result = await readTalker();
+
+  const filterTalker = result.filter((item) => item.id !== Number(id));
+
+  writeTalker(filterTalker);
+
+  return res.status(204).end();
+});
+
 module.exports = router;
