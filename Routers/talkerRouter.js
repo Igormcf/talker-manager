@@ -2,7 +2,17 @@ const express = require('express');
 
 const router = express.Router();
 
-const { readTalker } = require('../functions-fs');
+const { readTalker, writeTalker } = require('../functions-fs');
+
+const authorization = require('../Middlewares/authorization');
+
+const {
+  validaName,
+  validaAge,
+  validaTalk,
+  validaWatchedAt,
+  validaRate,
+} = require('../Middlewares/index');
 
 router.get('/', async (_req, res) => {
   const result = await readTalker();
@@ -25,6 +35,22 @@ router.get('/:id', async (req, res) => {
   }
 
   return res.status(200).json(findTalker);
+});
+
+router.post('/',
+  authorization,
+  validaName,
+  validaAge,
+  validaTalk,
+  validaWatchedAt,
+  validaRate,
+  async (req, res) => {
+    const { name, age, talk } = req.body;
+    const result = await readTalker();
+    const id = result.length + 1;
+    result.push({ id, name, age, talk });
+    await writeTalker(result);
+    res.status(201).json({ id, name, age, talk });
 });
 
 module.exports = router;
