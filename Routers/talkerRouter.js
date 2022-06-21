@@ -14,6 +14,22 @@ const {
   validaRate,
 } = require('../Middlewares/index');
 
+router.get('/search', authorization, async (req, res) => {
+  const { q } = req.query;
+  const result = await readTalker();
+  const filterTalker = result.filter((item) => item.name.includes(q));
+
+  if (!q) {
+    return res.status(200).json(result);
+  }
+
+  if (!filterTalker) {
+    return res.status(200).send([]);
+  }
+
+  return res.status(200).json(filterTalker);
+});
+
 router.get('/', async (_req, res) => {
   const result = await readTalker();
 
