@@ -20,3 +20,4 @@ Neste projeto foi construída uma aplicação de cadastro de talkers (palestrant
   - Necessário o ` node` instalado.
   - Instale as dependências com ` npm install`.
 </details>
+
